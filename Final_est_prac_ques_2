@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    int latestTimeCatchTheBus(vector<int>& buses, vector<int>& passengers, int capacity) {
+        sort(buses.begin(), buses.end());
+        sort(passengers.begin(), passengers.end());
+        unordered_set<int> occ(passengers.begin(), passengers.end());
+        
+        int p = 0;                     
+        int m = passengers.size();
+        int n = buses.size();
+        
+        for (int i = 0; i < n; ++i) {
+            int busTime = buses[i];
+            int boarded = 0;
+            int lastBoardedTime = -1;
+            
+            while (boarded < capacity && p < m && passengers[p] <= busTime) {
+                lastBoardedTime = passengers[p];
+                ++p;
+                ++boarded;
+            }
+            
+          
+            if (i == n - 1) {
+                int candidate;
+                if (boarded < capacity) {
+                    candidate = busTime;          
+                } else {
+                    candidate = lastBoardedTime - 1; 
+                }
+               
+                while (candidate >= 0 && occ.find(candidate) != occ.end()) {
+                    --candidate;
+                }
+                
+                return candidate;
+            }
+        }
+        return -1; 
+    }
+};
